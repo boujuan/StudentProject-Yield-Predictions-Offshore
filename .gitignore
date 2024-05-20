@@ -1,3 +1,7 @@
 *.code-workspace
 .codebuddy/
 __pycache__/
+myenv/
+.vscode/
+[Notes] creating virtuel enviroment.txt
+advanced_plotting.txt
