@@ -1,1 +1,3 @@
 *.code-workspace
+.codebuddy/
+__pycache__/
