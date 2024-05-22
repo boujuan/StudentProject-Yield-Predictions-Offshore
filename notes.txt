@@ -1,2 +1,13 @@
-- Compare data from both met masts with scatterplots
--
+- Choose 15 MW turbine (150 m)
+- Interpolate the wind_speed for height 150m
+- Choose MCP data (probably buoy 6)
+- Short term analysis:
+    - Mean, std of monthly and annual wind_speed
+    - Weibull model
+    - Windspeed profile [ws and wd] (binned by hour of day), and by month
+- MCP for the ERA5 data
+- Repeat anaylsis with corrected data
+- Long term analysis
+- Wind turbine power curves
+- Foxes wake model (Pascal)
+- Annual production of 1 turine and wind farm
