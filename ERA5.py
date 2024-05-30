@@ -167,10 +167,10 @@ missing_data = check_data_gaps(Era5_data)
 
 
 plot_histogram(Era5_data)
-plot_wind_rose(Era5_data)
+#plot_wind_rose(Era5_data)
 
-plot_monthly_average(monthly_avg)
-plot_yearly_average_with_trendline(yearly_avg)
+#plot_monthly_average(monthly_avg)
+#plot_yearly_average_with_trendline(yearly_avg)
 
-print("\n The Average Wind Speeds over the whole period in m/s:")
-print(overall_avg)
+#print("\n The Average Wind Speeds over the whole period in m/s:")
+#print(overall_avg)
