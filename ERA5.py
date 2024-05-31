@@ -166,7 +166,7 @@ yearly_avg, monthly_avg, overall_avg = calculate_averages(Era5_data)
 missing_data = check_data_gaps(Era5_data)   
 
 
-plot_histogram(Era5_data)
+#plot_histogram(Era5_data)
 #plot_wind_rose(Era5_data)
 
 #plot_monthly_average(monthly_avg)
