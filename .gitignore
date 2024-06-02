@@ -1,2 +1,7 @@
 *.code-workspace
 __pycache__/
+.codebuddy/
+.vscode/
+Juan_Branch/
+
+
