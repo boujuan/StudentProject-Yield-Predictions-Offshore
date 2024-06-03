@@ -4,75 +4,73 @@
 import os
 import numpy as np
 import pandas as pd
-import netCDF4 as nc
+# import netCDF4 as nc
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
+# import cartopy.crs as ccrs
 import foxes
 import foxes.variables as FV
 import foxes.constants as FC
 import foxes.opt.problems.layout.geom_layouts as grg# Purely geometrical layout problems (wake effects are not evaluated).
 from iwopy.interfaces.pymoo import Optimizer_pymoo        # some optimization Package idk
-import geopandas as gpd
+# import geopandas as gpd
 
 import foxes.opt.problems.layout.geom_layouts as grg      # Purely geometrical layout problems (wake effects are not evaluated).
 # to include Wake effect look up: https://fraunhoferiwes.github.io/foxes.docs/api_opt_problems.html#foxes-opt-problems-layout
 
 from iwopy.interfaces.pymoo import Optimizer_pymoo        # some optimization Package idk
-import geopandas as gpd
-
-# Function to read and extract data from csv files
-def read_csv(path):
-    data = pd.read_csv(path)
-    return data
+# import geopandas as gpd
 
 
-def NoWake_Layout(boundary,n,D,pop_size,n_gen):
 
+def NoWake_Layout(Place,Parameters):
     # No influenz from Wind conditions, just geometric Data
 
-    ## 2. The so-called optimization problem defines the variables that the optimizer will vary later.   
     # Farm layout turbine positioning problems. (No Wake)
     # GeomLayout        ##  A layout within a boundary geometry, purely defined by geometrical optimization (no wakes).
     # GeomRegGrid       ##  A regular grid within a boundary geometry.
     # GeomLayoutGridded ##  A layout within a boundary geometry, purely defined by geometrical optimization (no wakes), on a fixes background point grid.
     # GeomRegGrids      ##  A regular grid within a boundary geometry.
-
+    
+    # get area specific specs
+    boundary = Place[0]
+    name = Place[1]
+    N    = Place[2]
+    
     problem = grg.GeomRegGrid(
         boundary, 
-        n_turbines=n,  # the number of turbines to be placed 
-        min_dist=3*D,   # the minimal distance between turbines
-        # n_grids = 10  # number of Grids for GeomRegGrids
-        #D=D            # this avoids that rotor blades can reach out of area
+        n_turbines=N,                                       # the number of turbines to be placed 
+        min_dist=Parameters['min_dist']*Parameters['D'],    # the minimal distance between turbines
+        # n_grids = 10                                      # number of Grids for GeomRegGrids
+        # D=Parameters['D']                                 # this avoids that rotor blades can reach out of area
     )
-    ### Opjectives here only apply the model withour wake effect
     ###  https://fraunhoferiwes.github.io/foxes.docs/api_opt_problems_geom.html#foxes-opt-problems-layout-geom-layouts-objectives
 
-    # only one objective for 
-    problem.add_objective(grg.MaxDensity(problem, dfactor=2)) #objective function, which maximizes the grid spacing:
-    #problem.add_objective(grg.MeMiMaDist(problem)) #Mean-min-max distance objective for purely geometrical layouts problems.
+    # only one objective
+    problem.add_objective(grg.MaxDensity(problem, dfactor=2)) # objective function, which maximizes the grid spacing:
+    #problem.add_objective(grg.MeMiMaDist(problem))           # Mean-min-max distance objective for purely geometrical layouts problems.
 
-    # Finally, we add a constraint that considers only valid layouts, for which exactly N points lie within the area. 
-    # Afterwards, the problem setup is complete and we can initialize it:
+    # add a constraint that considers only valid layouts, for which exactly N points lie within the area. 
     problem.add_constraint(grg.Valid(problem))
     problem.add_constraint(grg.Boundary(problem))  # very importen, by my experience
-    ## ?? I don't get the diff between constrain and objective yet.
+    
     problem.initialize()
-    problem.get_fig()
+    problem.get_fig()     # plot the Problem (is kind of the boundary)
     plt.show()
-
+    
+    # define the Solver
     solver = Optimizer_pymoo(
         problem,
         problem_pars=dict(vectorize=True),
         algo_pars=dict(
-            type="GA",
-            pop_size=pop_size,  # the number of layouts per generation,  more Turbines require mor Layouts or we won't get a success
-            seed=42,       # the random seed, for reproducible results
+            type="GA",                          # type of algorithm to use. "GA": generic algorithm
+            pop_size = Parameters['pop_size'],  # the number of layouts per generation,  more Turbines require mor Layouts or we won't get a success
+            seed     = Parameters['seed'],      # the random seed, for reproducible results
         ),
         setup_pars=dict(),
         term_pars=dict(
-            n_gen=n_gen,
-            ftol=5e-3,     #1e-6 standard
-            xtol=5e-3,     #1e-6
+            n_gen=Parameters['n_gen'],          # number of 
+            ftol=5e-2,     #1e-6 standard
+            xtol=5e-2,     #1e-6
             ),  # the number of generations 
     )
     solver.initialize()
@@ -84,11 +82,15 @@ def NoWake_Layout(boundary,n,D,pop_size,n_gen):
 
 
     xy, valid = results.problem_results
-    problem.get_fig(xy, valid)
+    problem.get_fig(xy, valid, title=name)
     plt.show()
 
     #The list of turbine coordinates is now stored as a numpy array under `xy`:
-    print(xy)
+    # print(xy)
     df = pd.DataFrame(xy, columns=['x','y'])
-    print(df)
-    df.to_csv("NoWake_Layout.csv", header=True, index=False)
+    # print(df)
+    
+    ###------------------------------------save csv ------------------------------#######
+  
+    File_Name = "NoWake_Layout_" + name + ".csv"
+    df.to_csv(File_Name, header=True, index=False)
