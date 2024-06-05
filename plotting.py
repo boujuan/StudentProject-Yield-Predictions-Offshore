@@ -71,3 +71,33 @@ def plot_wind_farms_and_buoys_zoomed(data_N9_1, data_N9_2, data_N9_3):
     
     plt.title('Wind Farms in the North Sea')
     plt.show()
+    
+def plot_buoy_data(time2, windspeed2, time6, windspeed6, windspeed_mcp_buoy2, windspeed_mcp_buoy6):
+    # Creating a figure with 4 subplots arranged in a 2x2 grid
+    fig, axes = plt.subplots(2, 2, figsize=(13, 8), sharey=True, sharex=True)
+
+    axes[0, 0].plot(time6, windspeed6[:, 0, 0, 2])
+    axes[0, 0].set_title('Buoy 6')
+    axes[0, 0].set_xlabel('Time')
+    axes[0, 0].set_ylabel('Wind Speed (m/s)')
+
+    axes[0, 1].plot(time2, windspeed2[:, 0, 0, 2])
+    axes[0, 1].set_title('Buoy 2')
+    axes[0, 1].set_xlabel('Time')
+    axes[0, 1].set_ylabel('Wind Speed (m/s)')
+
+    axes[1, 0].plot(time6, windspeed_mcp_buoy6[:, 0, 0, 2])
+    axes[1, 0].set_title('MCP Data buoy 6')
+    axes[1, 0].set_xlabel('Time')
+    axes[1, 0].set_ylabel('Wind Speed (m/s)')
+
+    axes[1, 1].plot(time2, windspeed_mcp_buoy2[:, 0, 0, 2])
+    axes[1, 1].set_title('MCP Data buoy 2')
+    axes[1, 1].set_xlabel('Time')
+    axes[1, 1].set_ylabel('Wind Speed (m/s)')
+
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
+
+    # Display the plots
+    plt.show()
