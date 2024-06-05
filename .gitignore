@@ -3,3 +3,5 @@
 /geoplot_env/
 /Merge_files/
 StudentProject-Yield-Predictions-Offshore.code-workspace
+/__pycache__/*
+/__pycache__
