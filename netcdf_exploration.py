@@ -1,4 +1,4 @@
-def overview_ncfile(current_ncfile):
+def overview(current_ncfile):
     for group_count, group_name in enumerate(current_ncfile.groups):
         group = current_ncfile.groups[group_name]
         print(f"TopGroup Nr. {group_count + 1}: {group_name}")
@@ -17,7 +17,7 @@ def overview_ncfile(current_ncfile):
                 print(f"            SubGroupVariable: {variable_name}")
     print("---------------------------------------------------------")
 
-def explore_topgroup_variables(current_ncfile, topgroup_name):
+def topgroup_variables(current_ncfile, topgroup_name):
     for variable_name in current_ncfile.groups[topgroup_name].variables:
         variable = current_ncfile.groups[topgroup_name].variables[variable_name]
         print(f"Variable Name: {variable_name}")
@@ -27,7 +27,7 @@ def explore_topgroup_variables(current_ncfile, topgroup_name):
         print(f"    Shape: {variable.shape}")
         print("---------------------------------------------------------")
 
-def explore_sub_groups(current_ncfile, top_group_name):
+def sub_groups(current_ncfile, top_group_name):
     top_group_name = current_ncfile.groups[top_group_name]
     for subgroup_name in top_group_name.groups:
         subgroup = top_group_name.groups[subgroup_name]
