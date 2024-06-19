@@ -4,31 +4,22 @@
 import os
 import numpy as np
 import pandas as pd
-# import netCDF4 as nc
 import matplotlib.pyplot as plt
-# import cartopy.crs as ccrs
 import foxes
 import foxes.variables as FV
 import foxes.constants as FC
-import foxes.opt.problems.layout.geom_layouts as grg# Purely geometrical layout problems (wake effects are not evaluated).
+import foxes.opt.problems.layout.geom_layouts as grg # Purely geometrical layout problems (wake effects are not evaluated).
 from iwopy.interfaces.pymoo import Optimizer_pymoo        # some optimization Package idk
-# import geopandas as gpd
-
-import foxes.opt.problems.layout.geom_layouts as grg      # Purely geometrical layout problems (wake effects are not evaluated).
 # to include Wake effect look up: https://fraunhoferiwes.github.io/foxes.docs/api_opt_problems.html#foxes-opt-problems-layout
 
-from iwopy.interfaces.pymoo import Optimizer_pymoo        # some optimization Package idk
-# import geopandas as gpd
 
-
-
-def NoWake_Layout(Place,Parameters):
+def NoWake_Layout(Place, Parameters):
     # No influenz from Wind conditions, just geometric Data
 
     # Farm layout turbine positioning problems. (No Wake)
     # GeomLayout        ##  A layout within a boundary geometry, purely defined by geometrical optimization (no wakes).
     # GeomRegGrid       ##  A regular grid within a boundary geometry.
-    # GeomLayoutGridded ##  A layout within a boundary geometry, purely defined by geometrical optimization (no wakes), on a fixes background point grid.
+    # GeomLayoutGridded ##  A layout within a boundary geometry, purely defined by geometrical optimization (no wakes), on a fixed background point grid.
     # GeomRegGrids      ##  A regular grid within a boundary geometry.
     
     # get area specific specs
@@ -51,7 +42,7 @@ def NoWake_Layout(Place,Parameters):
 
     # add a constraint that considers only valid layouts, for which exactly N points lie within the area. 
     problem.add_constraint(grg.Valid(problem))
-    problem.add_constraint(grg.Boundary(problem))  # very importen, by my experience
+    problem.add_constraint(grg.Boundary(problem))  # very important, by my experience
     
     problem.initialize()
     problem.get_fig()     # plot the Problem (is kind of the boundary)
@@ -63,8 +54,7 @@ def NoWake_Layout(Place,Parameters):
         problem,
         problem_pars=dict(vectorize=True),
         algo_pars=dict(
-            type="GA",                          # type of algorithm to use. "GA": generic algorithm
-            pop_size = Parameters['pop_size'],  # the number of layouts per generation,  more Turbines require mor Layouts or we won't get a success
+             pop_size = Parameters['pop_size'],  # the number of layouts per generation,  more Turbines require more Layouts or we won't get a success
             seed     = Parameters['seed'],      # the random seed, for reproducible results
         ),
         setup_pars=dict(),
