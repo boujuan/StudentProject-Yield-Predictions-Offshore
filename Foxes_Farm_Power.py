@@ -48,40 +48,24 @@ def Foxes_Farm_Power(Farm_Name, States, Parameters):
     layout_output.get_figure(fig=fig, ax=axs[0], color_by="mean_REWS", title="Mean REWS [m/s]", s=150, annotate=1)
     layout_output.get_figure(fig=fig, ax=axs[1], color_by="mean_EFF", title="Mean efficiency [%]", s=150, annotate=0)
     plt.show()
-
-    # Get data for plotting
-    rews_data = layout_output.get_data(color_by="mean_REWS")
-    eff_data = layout_output.get_data(color_by="mean_EFF")
-
-    # Extract data into a DataFrame
-    single_results = pd.DataFrame({
-        'x': rews_data['x'],
-        'y': rews_data['y'],
-        'mean_REWS': rews_data['mean_REWS'],
-        'mean_EFF': eff_data['mean_EFF']
-    })
-    
-    single_results.to_csv('farm_layout_data.csv', index=False)
+   
 
     P0 = o.calc_mean_farm_power(ambient=True)
     P = o.calc_mean_farm_power()
     
     # Create summary results
     data = {
-        'Farm power [MW]': [P/1000],  # MW
-        'Farm ambient power [MW]': [P0/1000],  # MW
+        'Farm power [MW]': [P / 1000],  # MW
+        'Farm ambient power [MW]': [P0 / 1000],  # MW
         'Farm efficiency [%]': [o.calc_farm_efficiency() * 100],  # %
-        'Annual farm yield [TWh]': [o.calc_farm_yield(algo=algo) / 1000]  # TWh
+        'Annual farm yield [TWh]': [o.calc_farm_yield(algo=algo) / 1000],  # TWh
     }
     
-    if Name[7:8] == "N":
-        Results = pd.DataFrame(data, index=[Name[7:13]])  # "layout-  N-9.3.  geom.csv" only use middle as name 
-    else:
-        Results = pd.DataFrame(data, index=[Name])  
+    Results = pd.DataFrame(data, index=[Name])
+    turbine_df1 = o.reduce_states({FV.REWS: "mean", FV.P: "mean", FV.X:'mean', FV.Y: 'mean'})
+    turbine_df2 = o.calc_turbine_yield(algo, annual=True)
+    turbine_df = pd.concat([turbine_df1, turbine_df2], axis=1)
     
-    # Merge single results with summary results
-    single_results['Farm'] = Name  # Add a column to identify the farm in single results
-    Results = Results.append(single_results, ignore_index=True)
+    return Results, turbine_df
 
-    return Results
 
