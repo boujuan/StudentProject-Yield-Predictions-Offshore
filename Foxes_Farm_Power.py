@@ -65,7 +65,7 @@ def Foxes_Farm_Power(Farm_Name, States, Parameters):
     turbine_df1 = o.reduce_states({FV.REWS: "mean", FV.P: "mean", FV.X:'mean', FV.Y: 'mean'})
     turbine_df2 = o.calc_turbine_yield(algo, annual=True)
     turbine_df = pd.concat([turbine_df1, turbine_df2], axis=1)
-    
+
     return Results, turbine_df
 
 
