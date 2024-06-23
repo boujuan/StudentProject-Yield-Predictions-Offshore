@@ -1,7 +1,7 @@
 *.code-workspace
 /.codebuddy
 /geoplot_env/
-/Merge_files/
+/Merge_latest/
 StudentProject-Yield-Predictions-Offshore.code-workspace
 /__pycache__/*
 /__pycache__
