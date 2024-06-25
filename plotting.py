@@ -153,7 +153,7 @@ def plot_histogram_mounthly_mean(monthly_mean_ws, monthly_mean_wd):
 
     # Plot wind speed histogram on the left y-axis
     ax1.bar(months, monthly_mean_ws, width=0.4, label='Wind Speed 150m (Buoy 6)', color='b', align='center')
-    ax1.set_xlabel('Hour of the Day')
+    ax1.set_xlabel('Month')
     ax1.set_ylabel('Wind Speed (m/s)', color='b')
     ax1.tick_params(axis='y', labelcolor='b')
 
@@ -163,7 +163,7 @@ def plot_histogram_mounthly_mean(monthly_mean_ws, monthly_mean_wd):
     ax2.set_ylabel('Wind Direction (degrees)', color='r')
     ax2.tick_params(axis='y', labelcolor='r')
     fig.legend(loc="upper right", bbox_to_anchor=(1,1), bbox_transform=ax1.transAxes)
-    plt.title('Diurnal Profile of Wind Speed and Wind Direction for Buoy 6')
+    plt.title('Monthly Profile of Wind Speed and Wind Direction for Buoy 6')
     plt.grid(True)
     plt.show()
     
