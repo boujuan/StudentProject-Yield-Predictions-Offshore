@@ -1,3 +1,4 @@
 *.code-workspace
 /.codebuddy
 /geoplot_env/
+/myenv
